@@ -5,20 +5,27 @@ import SvgSolidGitHub from "../../icons/SolidGithub";
 import SvgSolidTwitter from "../../icons/SolidTwitter"
 import SvgSolidGoogle from "../../icons/SolidGoogle";
 import LgLogo  from "../../icons/LgLogo";
+import firebase from "../firebase"
+import { Link, withRouter, useHistory } from "react-router-dom"
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
+    onClick?: () => void;
 
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({
     children,
+    onClick,
     ...props
 }) => {
     return(
         <Button
             className="justify-center text-base py-3 mt-2"
             color="secondary"
+            onClick={onClick}
             {...props}
         >
             <div
@@ -35,9 +42,56 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     )
 }
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC = (props) => {
+    const history = useHistory()
+    const google = async () => {
+        try{
+            await firebase.signinwithgoogle()
+            console.log(firebase.getCurrentUsername())
+            history.push("/ezpz")
+        }catch (e) {
+            console.log(e)
+        }
+    }
+    const github = async () => {
+        try{
+            await firebase.signinwithGithub()
+            console.log(firebase.getCurrentUsername())
+            history.push("/ezpz")
+        }catch (e){
+            if(e.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address."){
+                var r = await firebase.fetchoriginalemail(e.email)
+                if(r.length > 0)
+                    toast.dark("Your email: "+e.email+" is linked with "+r[0])
+                console.log(r)
+            }
+            console.log(e.message)
+        }
+    }
+    const twitter = async () => {
+        try{
+            await firebase.signinwithTwitter()
+            console.log(firebase.getCurrentUsername())
+            history.push("/ezpz")
+        }catch(e){
+            console.log(e)
+        }
+    }
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            >
+
+            </ToastContainer>
             <div className="flex">
 
             </div>
@@ -71,15 +125,15 @@ const LoginPage: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
-                        <LoginButton>
+                        <LoginButton onClick={() => google()}>
                             <SvgSolidGoogle width={20} height={20} />
                             Log in with Google
                         </LoginButton>
-                        <LoginButton>
+                        <LoginButton onClick = {() => github()}>
                             <SvgSolidGitHub width={20} height={20} />
                             Log in with GitHub
                         </LoginButton>
-                        <LoginButton>
+                        <LoginButton onClick = {() => twitter()}>
                             <SvgSolidTwitter width={20} height={20} />
                             Log in with Twitter
                         </LoginButton>
