@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
             >
                 <div className="hidden sm:flex" />
                 <div className="flex justify-self-center self-center sm:hidden">
-                    <SvgSiteLogo width={120} height={120} />
+                    <SvgSiteLogo width={50} height={40} />
                 </div>
                 <div className="flex justify-center items-center flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 sm:w-400 w-full">
                     <div className="flex gap-2 flex-col">
@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
 
                     <div className="flex flex-row absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
                         <div className="hidden sm:flex">
-                            <SvgSiteLogo width={120} height={120} />
+                            <SvgSiteLogo width={50} height={40} />
                         </div>
                         <div className="flex flex-row gap-6 text-primary-300">
                             <a href="#" className="hover:text-primary-200">

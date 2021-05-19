@@ -6,7 +6,7 @@ export default function SvgSiteLogo(props: React.SVGProps<SVGSVGElement>) {
             width={16}
             height={16}
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 800"
+            viewBox="0 0 541.2 558.9"
             {...props}
         >
             <style>
