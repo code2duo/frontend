@@ -4,7 +4,8 @@ import SvgSolidDiscord from "../../icons/SolidDiscord";
 import SvgSolidGitHub from "../../icons/SolidGithub";
 import SvgSolidTwitter from "../../icons/SolidTwitter"
 import SvgSolidGoogle from "../../icons/SolidGoogle";
-import LgLogo  from "../../icons/LgLogo";
+import SvgSiteLogo  from "../../icons/SiteLogo";
+import SvgSiteWordLogo from "../../icons/SiteWordLogo";
 import firebase from "../firebase"
 import { Link, withRouter, useHistory } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
@@ -103,13 +104,12 @@ const LoginPage: React.FC = (props) => {
             >
                 <div className="hidden sm:flex" />
                 <div className="flex justify-self-center self-center sm:hidden">
-                    {/*<LgLogo />*/}
-                    <h3 className= "text-primary-300">Code2Duo</h3>
+                    <SvgSiteWordLogo width={160} height={70} />
                 </div>
-                <div className="flex justify-center items-center flex-col p-6 gap-5 bg-primary-800 sm:rounded-8  sm:w-400 w-full">
+                <div className="flex m-auto items-center flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
                     <div className="flex gap-2 flex-col">
-                        <span className="text-3xl text-center text-primary-100 font-bold">Welcome</span>
-                        <div className="text-primary-100 text-center flex-wrap">
+                        <span className="text-3xl text-primary-100 font-bold">Welcome</span>
+                        <div className="text-primary-100 flex-wrap">
                             By logging in you accept our&nbsp;
                             <a
                                 href="#"
@@ -141,8 +141,7 @@ const LoginPage: React.FC = (props) => {
 
                     <div className="flex flex-row absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
                         <div className="hidden sm:flex">
-                            {/*<LgLogo />*/}
-                            <h3 className= "text-primary-300">Code2Duo</h3>
+                            <SvgSiteWordLogo width={160} height={40} />
                         </div>
                         <div className="flex flex-row gap-6 text-primary-300">
                             <a href="#" className="hover:text-primary-200">
