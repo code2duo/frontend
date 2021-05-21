@@ -1,8 +1,7 @@
-export const __prod__ = process.env.NODE_ENV === "prod"
 export const __api_base_url__ = "https://api.code2duo.co/api/v1"
 export const firebaseConfig = {
     apiKey: "AIzaSyA2NdV6_9wwUba779WjdBUGEAlAN1DI4Lw",
-    authDomain: "app.code2duo.co",
+    authDomain: "code2duo.firebaseapp.com",
     projectId: "code2duo",
     storageBucket: "code2duo.appspot.com",
     messagingSenderId: "958137059797",

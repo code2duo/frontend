@@ -107,7 +107,7 @@ const LoginPage: React.FC = () => {
                                 Privacy Policy
                             </a>
                             &nbsp;and&nbsp;
-                            <a href="#" className="text-accent hover:underline">
+                            <a href="https://code2duo.co/privacy-policy.html" className="text-accent hover:underline">
                                 Terms of Service
                             </a>
 
