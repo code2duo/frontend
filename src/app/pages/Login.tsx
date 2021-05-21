@@ -10,8 +10,6 @@ import {toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import {useAuth} from "../contexts/AuthContext";
 import {auth} from "../services/firebase";
-import http from "../services/httpservice";
-import {__api_base_url__} from "../../constants";
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
@@ -48,7 +46,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 const LoginPage: React.FC = () => {
     const history = useHistory();
     // @ts-ignore
-    const { signinwithGoogle, signinwithGithub, signinwithTwitter, idToken, setUsername } = useAuth();
+    const { signinwithGoogle, signinwithGithub, signinwithTwitter } = useAuth();
 
     const globalSigninHandler = async (provider: string) => {
         try{
