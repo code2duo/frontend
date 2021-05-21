@@ -23,40 +23,40 @@ function AuthProvider({ children }) {
 
     async function signinwithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
-        await firebase.auth().signInWithPopup(provider);
+        await globalHandler(provider);
     }
     async function signinwithGithub() {
         const provider = new firebase.auth.GithubAuthProvider();
-        await firebase.auth().signInWithPopup(provider);
+        await globalHandler(provider);
     }
     async function signinwithTwitter() {
         const provider = new firebase.auth.TwitterAuthProvider();
-        await firebase.auth().signInWithPopup(provider);
+        await globalHandler(provider);
+    }
+
+    async function globalHandler(provider) {
+        setLoading(true);
+        await firebase.auth().signInWithPopup(provider).finally(() => {setLoading(false)});
     }
 
     async function mergeAuthProviders(provider) {
-        const twitterProvider = new app.auth.TwitterAuthProvider()
-        const googleProvider = new app.auth.GoogleAuthProvider()
-        const githubProvider = new app.auth.GithubAuthProvider()
+        const twitterProvider = new app.auth.TwitterAuthProvider();
+        const googleProvider = new app.auth.GoogleAuthProvider();
+        const githubProvider = new app.auth.GithubAuthProvider();
 
         let x;
         if (provider === "google.com") {
-            x = googleProvider
+            x = googleProvider;
         }
         if (provider === "github.com") {
-            x = githubProvider
+            x = githubProvider;
         }
         if (provider === "twitter.com") {
-            x = twitterProvider
+            x = twitterProvider;
         }
         if (currentUser) {
-            currentUser.linkWithPopup(x)
-                .then(() => {
-                    console.log("linked successful")
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            setLoading(true);
+            currentUser.linkWithPopup(x).finally(() => {setLoading(false)});
         }
     }
 
@@ -65,7 +65,8 @@ function AuthProvider({ children }) {
     }
 
     async function signOut() {
-        await auth.signOut();
+        setLoading(true);
+        await auth.signOut().finally(() => {setLoading(false)});
     }
 
     useEffect(() => {

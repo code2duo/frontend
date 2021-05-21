@@ -10,6 +10,8 @@ import {toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import {useAuth} from "../contexts/AuthContext";
 import {auth} from "../services/firebase";
+import {CenterLoader} from "../components/CenterLoader";
+
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
@@ -46,7 +48,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 const LoginPage: React.FC = () => {
     const history = useHistory();
     // @ts-ignore
-    const { signinwithGoogle, signinwithGithub, signinwithTwitter } = useAuth();
+    const { signinwithGoogle, signinwithGithub, signinwithTwitter, loading } = useAuth();
 
     const globalSigninHandler = async (provider: string) => {
         try{
@@ -63,7 +65,6 @@ const LoginPage: React.FC = () => {
                 const r = await auth.fetchSignInMethodsForEmail(e.email);
                 if(r.length > 0)
                     toast.dark("Your email: "+e.email+" is linked with "+r[0])
-                console.log(r)
             }
         }
     }
@@ -77,7 +78,8 @@ const LoginPage: React.FC = () => {
     const twitter = async () => {
         await globalSigninHandler("twitter.com")
     }
-
+    if(loading)
+        return <CenterLoader />
     return (
         <>
             <div className="flex">
@@ -99,7 +101,7 @@ const LoginPage: React.FC = () => {
                         <div className="text-primary-100 flex-wrap">
                             By logging in you accept our&nbsp;
                             <a
-                                href="#"
+                                href="https://code2duo.co/privacy-policy.html"
                                 className="text-accent hover:underline"
                             >
                                 Privacy Policy
@@ -131,18 +133,18 @@ const LoginPage: React.FC = () => {
                             <SvgSiteWordLogo width={160} height={40} />
                         </div>
                         <div className="flex flex-row gap-6 text-primary-300">
-                            <a href="#" className="hover:text-primary-200">
+                            <a href="https://code2duo.co/privacy-policy.html" className="hover:text-primary-200">
                                 Privacy policy
                             </a>
                             <a
-                                href="https://github.com/"
+                                href="mailto:bugreport@code2duo.co"
                                 className="ml-2 hover:text-primary-200"
                             >
                                 Report a bug
                             </a>
                             <div className="flex flex-row gap-6 sm:gap-4">
                                 <a
-                                    href="https://github.com"
+                                    href="https://github.com/code2duo"
                                     target="_blank"
                                     rel="noreferrer"
                                 >
