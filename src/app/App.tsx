@@ -5,6 +5,7 @@ import Login from "./pages/Login"
 import Loading from "./components/Loading";
 import TestPage from "./pages/TestPage";
 import Dashboard from "./pages/Dashboard";
+import {CenterLoader} from "./components/CenterLoader"
 import ProtectedRoute from "./components/ProtectedRoute"
 import UnprotectedRoute from "./components/UnprotectedRoute";
 import { useAuth } from "./contexts/AuthContext";
@@ -29,7 +30,7 @@ function App() {
 
             </ToastContainer>
             {loading ? (
-                <Loading />
+                <CenterLoader />
             ) : (
                 <Switch>
                     <ProtectedRoute path="/" exact component={Dashboard} />

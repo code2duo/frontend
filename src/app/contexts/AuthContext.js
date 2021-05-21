@@ -23,15 +23,21 @@ function AuthProvider({ children }) {
 
     async function signinwithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
+        setLoading(true)
         await firebase.auth().signInWithPopup(provider);
+        setLoading(false)
     }
     async function signinwithGithub() {
         const provider = new firebase.auth.GithubAuthProvider();
+        setLoading(true)
         await firebase.auth().signInWithPopup(provider);
+        setLoading(false)
     }
     async function signinwithTwitter() {
         const provider = new firebase.auth.TwitterAuthProvider();
+        setLoading(true)
         await firebase.auth().signInWithPopup(provider);
+        setLoading(false)
     }
 
     async function mergeAuthProviders(provider) {
@@ -50,6 +56,7 @@ function AuthProvider({ children }) {
             x = twitterProvider
         }
         if (currentUser) {
+            setLoading(true)
             currentUser.linkWithPopup(x)
                 .then(() => {
                     console.log("linked successful")
@@ -57,6 +64,7 @@ function AuthProvider({ children }) {
                 .catch(err => {
                     console.log(err)
                 })
+            setLoading(false)
         }
     }
 
@@ -65,7 +73,9 @@ function AuthProvider({ children }) {
     }
 
     async function signOut() {
+        setLoading(true)
         await auth.signOut();
+        setLoading(false)
     }
 
     useEffect(() => {

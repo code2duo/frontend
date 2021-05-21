@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useHistory} from "react-router-dom";
 import {Button} from "../components/Button";
 import SvgSolidDiscord from "../../icons/SolidDiscord";
@@ -10,6 +10,8 @@ import {toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import {useAuth} from "../contexts/AuthContext";
 import {auth} from "../services/firebase";
+import {CenterLoader} from "../components/CenterLoader";
+
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
@@ -46,7 +48,8 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 const LoginPage: React.FC = () => {
     const history = useHistory();
     // @ts-ignore
-    const { signinwithGoogle, signinwithGithub, signinwithTwitter } = useAuth();
+    const { signinwithGoogle, signinwithGithub, signinwithTwitter, loading } = useAuth();
+    const [ spinner, setSpinner ] = useState(false)
 
     const globalSigninHandler = async (provider: string) => {
         try{
@@ -69,7 +72,9 @@ const LoginPage: React.FC = () => {
     }
 
     const google = async () => {
+        // setSpinner(true)
         await globalSigninHandler("google.com")
+        // setSpinner(false)
     }
     const github = async () => {
         await globalSigninHandler("github.com")
@@ -77,7 +82,8 @@ const LoginPage: React.FC = () => {
     const twitter = async () => {
         await globalSigninHandler("twitter.com")
     }
-
+    if(loading)
+        return <CenterLoader />
     return (
         <>
             <div className="flex">
