@@ -1,6 +1,6 @@
 import React from "react";
 
-function LoadingSvg(props) {
+function LoadingSvg(props: { className: any; }) {
     return (
         <svg
             className={`animate-spin h-4 w-4 ${props.className}`}
