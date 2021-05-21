@@ -90,8 +90,8 @@ function AuthProvider({ children }) {
                 setUsername(null);
             }
             setLoading(false);
-        });
-    }, [setCurrentUser, setUsername]);
+        });// tslint:disable-next-line
+    }, [setCurrentUser, setUsername, history]);
 
     const value = {
         currentUser,
