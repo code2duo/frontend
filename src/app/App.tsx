@@ -1,34 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import Login from "./pages/Login"
-import Test from "./pages/TestPage"
+import React from 'react';
 import "../index.css"
-import {
-  BrowserRouter as Router,
-    Switch,
-    Route
-} from "react-router-dom";
-import firebase from "./firebase"
+import { Switch } from "react-router-dom";
+import Login from "./pages/Login"
+import Loading from "./components/Loading";
+import TestPage from "./pages/TestPage";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute"
+import UnprotectedRoute from "./components/UnprotectedRoute";
+import { useAuth } from "./contexts/AuthContext";
+import {ToastContainer} from "react-toastify";
 
 function App() {
-    const [firebaseInitialized, setFirebaseInitialized ] = useState(false)
+    // @ts-ignore
+    const { loading } = useAuth();
+    return (
+        <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            >
 
-    useEffect(() => {
-        firebase.isInitialized().then(val => {
-            setFirebaseInitialized(val)
-        })
-    })
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-            <Login />
-        </Route>
-          <Route exact path="/ezpz">
-              <Test />
-          </Route>
-      </Switch>
-    </Router>
-  );
+            </ToastContainer>
+            {loading ? (
+                <Loading />
+            ) : (
+                <Switch>
+                    <ProtectedRoute path="/" exact component={Dashboard} />
+                    <UnprotectedRoute path="/login" component={Login} />
+                    <ProtectedRoute path="/testpage" component={TestPage} />
+                </Switch>
+          )}
+        </>
+    );
 }
 
 export default App;

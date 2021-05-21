@@ -1,15 +1,17 @@
 import React from 'react'
+import {useHistory} from "react-router-dom";
 import {Button} from "../components/Button";
 import SvgSolidDiscord from "../../icons/SolidDiscord";
 import SvgSolidGitHub from "../../icons/SolidGithub";
 import SvgSolidTwitter from "../../icons/SolidTwitter"
 import SvgSolidGoogle from "../../icons/SolidGoogle";
-import SvgSiteLogo  from "../../icons/SiteLogo";
 import SvgSiteWordLogo from "../../icons/SiteWordLogo";
-import firebase from "../firebase"
-import { Link, withRouter, useHistory } from "react-router-dom"
-import { ToastContainer, toast } from "react-toastify"
+import {toast} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import {useAuth} from "../contexts/AuthContext";
+import {auth} from "../services/firebase";
+import http from "../services/httpservice";
+import {__api_base_url__} from "../../constants";
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
@@ -43,56 +45,43 @@ const LoginButton: React.FC<LoginButtonProps> = ({
     )
 }
 
-const LoginPage: React.FC = (props) => {
-    const history = useHistory()
-    const google = async () => {
+const LoginPage: React.FC = () => {
+    const history = useHistory();
+    // @ts-ignore
+    const { signinwithGoogle, signinwithGithub, signinwithTwitter, idToken, setUsername } = useAuth();
+
+    const globalSigninHandler = async (provider: string) => {
         try{
-            await firebase.signinwithgoogle()
-            console.log(firebase.getCurrentUsername())
-            history.push("/ezpz")
-        }catch (e) {
-            console.log(e)
-        }
-    }
-    const github = async () => {
-        try{
-            await firebase.signinwithGithub()
-            console.log(firebase.getCurrentUsername())
-            history.push("/ezpz")
+            if (provider === "google.com") {
+                await signinwithGoogle();
+            }else if (provider === "github.com") {
+                await signinwithGithub();
+            }else if (provider === "twitter.com") {
+                await signinwithTwitter();
+            }
+            history.push("/");
         }catch (e){
             if(e.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address."){
-                var r = await firebase.fetchoriginalemail(e.email)
+                const r = await auth.fetchSignInMethodsForEmail(e.email);
                 if(r.length > 0)
                     toast.dark("Your email: "+e.email+" is linked with "+r[0])
                 console.log(r)
             }
-            console.log(e.message)
         }
+    }
+
+    const google = async () => {
+        await globalSigninHandler("google.com")
+    }
+    const github = async () => {
+        await globalSigninHandler("github.com")
     }
     const twitter = async () => {
-        try{
-            await firebase.signinwithTwitter()
-            console.log(firebase.getCurrentUsername())
-            history.push("/ezpz")
-        }catch(e){
-            console.log(e)
-        }
+        await globalSigninHandler("twitter.com")
     }
+
     return (
         <>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            >
-
-            </ToastContainer>
             <div className="flex">
 
             </div>

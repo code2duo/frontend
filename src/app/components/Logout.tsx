@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { ButtonLink } from "../components/ButtonLink";
-import firebase from "../firebase"
+import React from "react";
+import { ButtonLink } from "./ButtonLink";
+import {useAuth} from "../contexts/AuthContext";
 
 interface logoutProps {}
 
@@ -8,14 +8,15 @@ interface logoutProps {}
 // should be done by the component sending the user here
 // then it should redirect to landing page
 const Logout: React.FC<logoutProps> = ({}) => {
-
-    const logoutt = () => {
-        firebase.logout()
+    // @ts-ignore
+    const { signOut } = useAuth();
+    const logout = () => {
+        signOut()
     }
     return (
         <>
             <ButtonLink
-                onClick={() => logoutt()}
+                onClick={() => logout()}
             >
                 click here if you are not automatically redirected
             </ButtonLink>

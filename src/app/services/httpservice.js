@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import firebase from '../firebase'
 
 axios.interceptors.response.use(null, error => {
 
@@ -10,20 +9,16 @@ axios.interceptors.response.use(null, error => {
         error.response.status < 500;
 
     if (!expectedError) {
-        toast.error("An unexpected error occurrred.");
+        toast.error("An unexpected error occurred.");
     }
 
     return Promise.reject(error);
 });
 
- async function setToken() {
-    await firebase.getCurrentUserObject().getIdToken()
-         .then((token) => {
-            console.log(token)
-            axios.defaults.headers.common["Authorization"] = "Bearer "+token ;
-         })
-         .catch(er => console.log(er))
+ async function setToken(iToken) {
+      axios.defaults.headers.common["Authorization"] = "Bearer "+iToken ;
 }
+// eslint-disable-next-line
 export default {
     get: axios.get,
     post: axios.post,
