@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {useHistory} from "react-router-dom";
 import {Button} from "../components/Button";
 import SvgSolidDiscord from "../../icons/SolidDiscord";
@@ -49,7 +49,6 @@ const LoginPage: React.FC = () => {
     const history = useHistory();
     // @ts-ignore
     const { signinwithGoogle, signinwithGithub, signinwithTwitter, loading } = useAuth();
-    const [ spinner, setSpinner ] = useState(false)
 
     const globalSigninHandler = async (provider: string) => {
         try{
@@ -66,15 +65,12 @@ const LoginPage: React.FC = () => {
                 const r = await auth.fetchSignInMethodsForEmail(e.email);
                 if(r.length > 0)
                     toast.dark("Your email: "+e.email+" is linked with "+r[0])
-                console.log(r)
             }
         }
     }
 
     const google = async () => {
-        // setSpinner(true)
         await globalSigninHandler("google.com")
-        // setSpinner(false)
     }
     const github = async () => {
         await globalSigninHandler("github.com")

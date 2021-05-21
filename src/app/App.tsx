@@ -2,7 +2,6 @@ import React from 'react';
 import "../index.css"
 import { Switch } from "react-router-dom";
 import Login from "./pages/Login"
-import Loading from "./components/Loading";
 import TestPage from "./pages/TestPage";
 import Dashboard from "./pages/Dashboard";
 import {CenterLoader} from "./components/CenterLoader"
