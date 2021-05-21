@@ -1,24 +1,34 @@
 import React from 'react'
+import {useHistory} from "react-router-dom";
 import {Button} from "../components/Button";
 import SvgSolidDiscord from "../../icons/SolidDiscord";
 import SvgSolidGitHub from "../../icons/SolidGithub";
 import SvgSolidTwitter from "../../icons/SolidTwitter"
 import SvgSolidGoogle from "../../icons/SolidGoogle";
-import SvgSiteLogo  from "../../icons/SiteLogo";
+import SvgSiteWordLogo from "../../icons/SiteWordLogo";
+import {toast} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+import {useAuth} from "../contexts/AuthContext";
+import {auth} from "../services/firebase";
+import http from "../services/httpservice";
+import {__api_base_url__} from "../../constants";
 
 interface LoginButtonProps {
     children: [React.ReactNode, React.ReactNode];
+    onClick?: () => void;
 
 }
 
 const LoginButton: React.FC<LoginButtonProps> = ({
     children,
+    onClick,
     ...props
 }) => {
     return(
         <Button
             className="justify-center text-base py-3 mt-2"
             color="secondary"
+            onClick={onClick}
             {...props}
         >
             <div
@@ -36,6 +46,40 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 }
 
 const LoginPage: React.FC = () => {
+    const history = useHistory();
+    // @ts-ignore
+    const { signinwithGoogle, signinwithGithub, signinwithTwitter, idToken, setUsername } = useAuth();
+
+    const globalSigninHandler = async (provider: string) => {
+        try{
+            if (provider === "google.com") {
+                await signinwithGoogle();
+            }else if (provider === "github.com") {
+                await signinwithGithub();
+            }else if (provider === "twitter.com") {
+                await signinwithTwitter();
+            }
+            history.push("/");
+        }catch (e){
+            if(e.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address."){
+                const r = await auth.fetchSignInMethodsForEmail(e.email);
+                if(r.length > 0)
+                    toast.dark("Your email: "+e.email+" is linked with "+r[0])
+                console.log(r)
+            }
+        }
+    }
+
+    const google = async () => {
+        await globalSigninHandler("google.com")
+    }
+    const github = async () => {
+        await globalSigninHandler("github.com")
+    }
+    const twitter = async () => {
+        await globalSigninHandler("twitter.com")
+    }
+
     return (
         <>
             <div className="flex">
@@ -49,12 +93,12 @@ const LoginPage: React.FC = () => {
             >
                 <div className="hidden sm:flex" />
                 <div className="flex justify-self-center self-center sm:hidden">
-                    <SvgSiteLogo width={50} height={40} />
+                    <SvgSiteWordLogo width={160} height={70} />
                 </div>
-                <div className="flex justify-center items-center flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 sm:w-400 w-full">
+                <div className="flex m-auto items-center flex-col p-6 gap-5 bg-primary-800 sm:rounded-8 z-10 sm:w-400 w-full">
                     <div className="flex gap-2 flex-col">
-                        <span className="text-3xl text-center text-primary-100 font-bold">Welcome</span>
-                        <div className="text-primary-100 text-center flex-wrap">
+                        <span className="text-3xl text-primary-100 font-bold">Welcome</span>
+                        <div className="text-primary-100 flex-wrap">
                             By logging in you accept our&nbsp;
                             <a
                                 href="#"
@@ -70,15 +114,15 @@ const LoginPage: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
-                        <LoginButton>
+                        <LoginButton onClick={() => google()}>
                             <SvgSolidGoogle width={20} height={20} />
                             Log in with Google
                         </LoginButton>
-                        <LoginButton>
+                        <LoginButton onClick = {() => github()}>
                             <SvgSolidGitHub width={20} height={20} />
                             Log in with GitHub
                         </LoginButton>
-                        <LoginButton>
+                        <LoginButton onClick = {() => twitter()}>
                             <SvgSolidTwitter width={20} height={20} />
                             Log in with Twitter
                         </LoginButton>
@@ -86,7 +130,7 @@ const LoginPage: React.FC = () => {
 
                     <div className="flex flex-row absolute bottom-0 w-full justify-between px-5 py-5 mt-auto items-center sm:px-7">
                         <div className="hidden sm:flex">
-                            <SvgSiteLogo width={50} height={40} />
+                            <SvgSiteWordLogo width={160} height={40} />
                         </div>
                         <div className="flex flex-row gap-6 text-primary-300">
                             <a href="#" className="hover:text-primary-200">
