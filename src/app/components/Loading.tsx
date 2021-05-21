@@ -3,7 +3,8 @@ import React from "react";
 
 import LoadingSvg from "../../icons/LoadingSvg";
 
-function Loading(props: { nohscreen: any; className: any; }) {
+// @ts-ignore
+function Loading(props) {
     return (
         <div
             className={`flex flex-col justify-center items-center ${
