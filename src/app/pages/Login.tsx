@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
 
                         </div>
                     </div>
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 w-full">
                         <LoginButton onClick={() => google()}>
                             <SvgSolidGoogle width={20} height={20} />
                             Log in with Google
