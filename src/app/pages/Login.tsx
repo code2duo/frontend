@@ -82,9 +82,6 @@ const LoginPage: React.FC = () => {
         return <CenterLoader />
     return (
         <>
-            <div className="flex">
-
-            </div>
             <div
                 className="grid w-full h-full"
                 style={{
