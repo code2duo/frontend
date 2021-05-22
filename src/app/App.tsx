@@ -9,10 +9,11 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import UnprotectedRoute from "./components/UnprotectedRoute";
 import { useAuth } from "./contexts/AuthContext";
 import {ToastContainer} from "react-toastify";
+import {SignupUserModal} from "./components/SignupUserModal";
 
 function App() {
     // @ts-ignore
-    const { loading } = useAuth();
+    const { loading, username, currentUser } = useAuth();
     return (
         <>
             <ToastContainer
@@ -36,7 +37,10 @@ function App() {
                     <UnprotectedRoute path="/login" component={Login} />
                     <ProtectedRoute path="/testpage" component={TestPage} />
                 </Switch>
-          )}
+            )}
+            {username == null && currentUser != null &&
+            <SignupUserModal onRequestClose={() => false} />
+            }
         </>
     );
 }

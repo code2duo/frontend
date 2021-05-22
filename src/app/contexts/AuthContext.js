@@ -75,21 +75,18 @@ function AuthProvider({ children }) {
                 setLoading(false);
                 setCurrentUser(null)
                 setIdToken(null)
+                setUsername(null)
                 return history.push("/login")
             }
             setCurrentUser(user);
             const idToken = await user.getIdToken();
             setIdToken(idToken)
-            try {
-                http.setToken(idToken);
-                const uname = await http.get(__api_base_url__+"/profile/get-username", {}).then(
-                    (res) => res.data["message"]["username"]
-                )
-                setUsername(uname);
-            } catch {
-                setUsername(null);
-            }
-            setLoading(false);
+            http.setToken(idToken);
+            setLoading(true)
+            await http.get(__api_base_url__+"/profile/get-username", {})
+                .then((res) => {setUsername(res.data["message"]["username"])})
+                .catch((err) => {console.log(err)})
+                .finally(() => {setLoading(false)});
         });// tslint:disable-next-line
     }, [setCurrentUser, setUsername, history]);
 
