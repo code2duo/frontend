@@ -1,5 +1,4 @@
 import React from 'react'
-import {useHistory} from "react-router-dom";
 import {Button} from "../components/Button";
 import SvgSolidDiscord from "../../icons/SolidDiscord";
 import SvgSolidGitHub from "../../icons/SolidGithub";
@@ -46,7 +45,6 @@ const LoginButton: React.FC<LoginButtonProps> = ({
 }
 
 const LoginPage: React.FC = () => {
-    const history = useHistory();
     // @ts-ignore
     const { signinwithGoogle, signinwithGithub, signinwithTwitter, loading } = useAuth();
 
@@ -59,7 +57,6 @@ const LoginPage: React.FC = () => {
             }else if (provider === "twitter.com") {
                 await signinwithTwitter();
             }
-            history.push("/");
         }catch (e){
             if(e.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address."){
                 const r = await auth.fetchSignInMethodsForEmail(e.email);
@@ -82,9 +79,6 @@ const LoginPage: React.FC = () => {
         return <CenterLoader />
     return (
         <>
-            <div className="flex">
-
-            </div>
             <div
                 className="grid w-full h-full"
                 style={{
@@ -113,7 +107,7 @@ const LoginPage: React.FC = () => {
 
                         </div>
                     </div>
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 w-full">
                         <LoginButton onClick={() => google()}>
                             <SvgSolidGoogle width={20} height={20} />
                             Log in with Google
