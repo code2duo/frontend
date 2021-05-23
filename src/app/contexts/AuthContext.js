@@ -69,13 +69,24 @@ function AuthProvider({ children }) {
         await auth.signOut().finally(() => {setLoading(false)});
     }
 
+    async function getAndSetUsername(){
+        const idToken = getIdToken();
+        http.setToken(idToken);
+        await http.get(__api_base_url__+"/profile/get-username", {})
+            .then((res) => {
+                setUsername(res.data["message"]["username"])
+                localStorage.setItem("username", res.data["message"]["username"]);
+            })
+    }
+
     useEffect(() => {
         return auth.onAuthStateChanged(async (user) => {
             if(!user){
                 setLoading(false);
-                setCurrentUser(null)
-                setIdToken(null)
-                setUsername(null)
+                setCurrentUser(null);
+                setIdToken(null);
+                setUsername(null);
+                localStorage.removeItem("username");
                 return history.push("/login")
             }
             setCurrentUser(user);
@@ -84,17 +95,21 @@ function AuthProvider({ children }) {
             http.setToken(idToken);
             setLoading(true)
             await http.get(__api_base_url__+"/profile/get-username", {})
-                .then((res) => {setUsername(res.data["message"]["username"])})
-                .catch((err) => {console.log(err)})
-                .finally(() => {setLoading(false)});
+                .then((res) => {
+                    setUsername(res.data["message"]["username"]);
+                    localStorage.setItem("username", res.data["message"]["username"]);
+                })
+                .finally(() => setLoading(false));
         });// tslint:disable-next-line
     }, [setCurrentUser, setUsername, history]);
 
     const value = {
         currentUser,
         loading,
+        setLoading,
         username,
         setUsername,
+        getAndSetUsername,
         getIdToken,
         signinwithGoogle,
         signinwithGithub,

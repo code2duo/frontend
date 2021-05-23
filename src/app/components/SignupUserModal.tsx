@@ -1,10 +1,13 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, {useState} from "react";
 import { InputField } from "./form-fields/InputField";
 import { Button } from "./Button";
-import { ButtonLink } from "./ButtonLink";
 import { Modal } from "./Modal";
 import { NativeSelect } from "./NativeSelect";
+import http from "../services/httpservice";
+import {__api_base_url__} from "../../constants";
+import {useAuth} from "../contexts/AuthContext";
+import {useHistory} from "react-router-dom";
 
 interface CreateRoomModalProps {
     onRequestClose: () => void;
@@ -21,8 +24,12 @@ export const SignupUserModal: React.FC<CreateRoomModalProps> = ({
                                                                     data,
                                                                     edit,
                                                                 }) => {
+    const history = useHistory();
+    const [modal, setModal] = useState(true);
+    // @ts-ignore
+    const { getAndSetUsername, idToken } = useAuth();
     return (
-        <Modal isOpen onRequestClose={onRequestClose} ariaHideApp={false}>
+        <Modal isOpen={modal} onRequestClose={onRequestClose} ariaHideApp={false}>
             <Formik<{
                 first_name: string;
                 language: string;
@@ -55,9 +62,14 @@ export const SignupUserModal: React.FC<CreateRoomModalProps> = ({
                     return errors;
                 }}
                 onSubmit={async ({ first_name, last_name, language }) => {
-                    const d = { first_name, last_name, language };
-                    console.log(d);
-                    onRequestClose();
+                    http.setToken(idToken)
+                    await http.post(__api_base_url__+"/profile", { first_name, last_name, language })
+                        .catch(() => null)
+                        .finally(() => {
+                            getAndSetUsername();
+                            setModal(false);
+                            history.push("/");
+                        });
                 }}
             >
                 {({ setFieldValue, values, isSubmitting }) => (
@@ -115,13 +127,10 @@ export const SignupUserModal: React.FC<CreateRoomModalProps> = ({
                             <Button loading={isSubmitting} type="submit" className={`mr-3`}>
                                 Submit
                             </Button>
-                            <ButtonLink type="button" onClick={onRequestClose}>
-                                Cancel
-                            </ButtonLink>
                         </div>
                     </Form>
                 )}
             </Formik>
         </Modal>
-    );
-};
+    )
+}
