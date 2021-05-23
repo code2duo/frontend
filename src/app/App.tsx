@@ -13,7 +13,7 @@ import {SignupUserModal} from "./components/SignupUserModal";
 
 function App() {
     // @ts-ignore
-    const { loading, username, currentUser } = useAuth();
+    const { loading, currentUser } = useAuth();
     return (
         <>
             <ToastContainer
@@ -38,8 +38,10 @@ function App() {
                     <ProtectedRoute path="/testpage" component={TestPage} />
                 </Switch>
             )}
-            {username == null && currentUser != null &&
-            <SignupUserModal onRequestClose={() => false} />
+            {localStorage.getItem("username") === "null" && currentUser &&
+                <SignupUserModal onRequestClose={
+                    () => null
+                } />
             }
         </>
     );
