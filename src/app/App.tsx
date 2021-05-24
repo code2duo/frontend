@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Login from "./pages/Login"
 import Test from "./pages/TestPage"
+
 import "../index.css"
 import {
   BrowserRouter as Router,
@@ -8,6 +9,7 @@ import {
     Route
 } from "react-router-dom";
 import firebase from "./firebase"
+import Modal from './components/Modal';
 
 function App() {
     const [firebaseInitialized, setFirebaseInitialized ] = useState(false)
@@ -26,6 +28,10 @@ function App() {
           <Route exact path="/ezpz">
               <Test />
           </Route>
+          <Route exact path="/ggmu">
+              <Modal/>
+          </Route>
+          
       </Switch>
     </Router>
   );
