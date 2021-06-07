@@ -9,11 +9,10 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import UnprotectedRoute from "./components/UnprotectedRoute";
 import { useAuth } from "./contexts/AuthContext";
 import {ToastContainer} from "react-toastify";
-import {SignupUserModal} from "./components/SignupUserModal";
 
 function App() {
     // @ts-ignore
-    const { loading, currentUser } = useAuth();
+    const { loading } = useAuth();
     return (
         <>
             <ToastContainer
@@ -38,11 +37,6 @@ function App() {
                     <ProtectedRoute path="/testpage" component={TestPage} />
                 </Switch>
             )}
-            {localStorage.getItem("username") === "null" && currentUser &&
-                <SignupUserModal onRequestClose={
-                    () => null
-                } />
-            }
         </>
     );
 }
